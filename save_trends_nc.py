@@ -16,7 +16,7 @@ import pymannkendall as mk
 
 data_type = 'CanGridP' # choose from CanGridP, CanKrig, or CanGRD
 
-data_var = 't' # p or tmin,tmean,tmax -- THIS IS ONLY FOR CanGRD (selection doesnt matter for CanGridP or CanKrig, both are precip)
+data_var = 'tmean' # p or tmin,tmean,tmax -- THIS IS ONLY FOR CanGRD (selection doesnt matter for CanGridP or CanKrig, both are precip)
     
 #inclusive years
 startyear = 1948
@@ -84,7 +84,7 @@ elif data_type == 'CanGridP':
             time_str.append(f'{year}{month:02d}')
 
 
-    all_data = np.empty((x_len, y_len, len(time_cangrd_str)))
+    all_data = np.empty((x_len, y_len, len(time_str)))
 
         
     for i in range(len(time_str)):
@@ -94,7 +94,7 @@ elif data_type == 'CanGridP':
 
     precip_da = xr.DataArray(all_data,
                       dims=('lats', 'lons','time'),
-                      coords={'lats':  (('lats', 'lons'), lats_cangrd), 'lons':  (('lats', 'lons'), lons_cangrd), 'time': time_cangrd})
+                      coords={'lats':  (('lats', 'lons'), lats), 'lons':  (('lats', 'lons'), lons), 'time': time})
 
 if data_type in ['CanKrig','CanGridP']:
     #% annual 
@@ -142,8 +142,8 @@ if data_type == 'CanGRD':
     if data_var.startswith('t'):
         data_filepath = "C:/Users/GnegyE/Desktop/trends/raw_data/cangrd_t/"+data_var+"/"
     
-    elif data_var == "p":
-        data_filepath = #path to "precip_anomalies" folder on shared drive 
+    #elif data_var == "p":
+    #    data_filepath = #path to "precip_anomalies" folder on shared drive 
       
     x_len = 95
     y_len = 125
@@ -168,9 +168,9 @@ if data_type == 'CanGRD':
     years = [datetime.datetime(year, 1, 1) for year in range(startyear, endyear + 1)]
     
     def load_cangrd(seas_ID):
-        cangrd_data = np.empty((x_len, y_len, len(years_cangrd)))
+        cangrd_data = np.empty((x_len, y_len, len(years)))
         
-        for i in range(len(years_cangrd)):
+        for i in range(len(years)):
             year = years[i].year
             print(year)
             file = str(year) + seas_ID #13 for "annual" - see readme for cangrd
@@ -194,7 +194,7 @@ if data_type == 'CanGRD':
 
 def get_trendline(var):
     if np.all(np.isnan(var)) or np.all(var==0):
-        perc_change = np.nan
+        trend = np.nan
         pval = np.nan
     else:
         mk_samp = mk.yue_wang_modification_test(var,lag=1)
@@ -218,10 +218,10 @@ def get_trends(pr_da):
 #%% anomolies - precipitation given in percentage, temp in deg C
 
 trend_ann = get_trends(da_ann)
-trend_DJF = get_trends(da_djf)
-trend_MAM = get_trends(da_mam)
-trend_JJA = get_trends(da_jja)
-trend_SON = get_trends(da_son)
+trend_djf = get_trends(da_djf)
+trend_mam = get_trends(da_mam)
+trend_jja = get_trends(da_jja)
+trend_son = get_trends(da_son)
 
 
 #%% save it as a netcdf file
