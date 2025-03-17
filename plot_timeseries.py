@@ -15,8 +15,8 @@ from netCDF4 import Dataset
 import datetime
 import pymannkendall as mk
 
-data_type = 'CanGRD' # choose from CanGridP, CanKrig, or CanGRD
-data_var = 'tmin' # p or tmin,tmean,tmax -- THIS IS ONLY FOR CanGRD (selection doesnt matter for CanGridP or CanKrig, both are precip)
+data_type = 'CanGridP' # choose from CanGridP, CanKrig, or CanGRD
+data_var = 'p' # p or tmin,tmean,tmax -- THIS IS ONLY FOR CanGRD (selection doesnt matter for CanGridP or CanKrig, both are precip)
     
 #note this isnt set up to plot CanGRD precip or CanKrig (so only CanGridP and CanGRD temperatures)
 #%%
@@ -36,7 +36,6 @@ if data_type == 'CanGRD':
     
 else:
     endyear = 2018 #CanGridP, CanKrig
-    data_var=''
     longname = 'precipitation'
     unit = '%'
 
@@ -51,6 +50,14 @@ t_names = {
     'tmax': ' Max. ',
     'tmin': ' Min. ',
     'p': '',
+}
+
+seasons = {
+    'DJF': 'Winter',
+    'MAM': 'Spring',
+    'JJA': 'Summer',
+    'SON': 'Fall',
+    'Annual': 'Annual',
 }
 #%%
 
@@ -122,7 +129,7 @@ if data_type == 'CanGridP':
         return data
       
     time,time_str = [],[]
-    for year in range(startyear, endyear + 1):
+    for year in range(startyear-1, endyear + 1): #-1 to get D of previous year
         for month in range(1, 13):  # Months 1-12
             time.append(datetime.datetime(year, month, 1))
             time_str.append(f'{year}{month:02d}')
@@ -283,7 +290,7 @@ for prov in ['Canada',"NU","YT","QC","AB","SK","MB","NL","BC","PE","NB","NS","ON
             
         sign = "+" if change > 0 else ""
             
-        plt.title(province_names[prov] + " (" + sign + str(change) + "%)",fontsize=22)
+        plt.title(province_names[prov] + " (" + sign + str(change) + "%) - " + seasons[seas],fontsize=22)
 
         if longname == "temperature":
             plt.savefig(f"{savepath}/{data_var}/{seas}_{prov}.png", bbox_inches='tight', dpi=500)

@@ -16,7 +16,7 @@ import pymannkendall as mk
 
 data_type = 'CanGridP' # choose from CanGridP, CanKrig, or CanGRD
 
-data_var = 'tmean' # p or tmin,tmean,tmax -- THIS IS ONLY FOR CanGRD (selection doesnt matter for CanGridP or CanKrig, both are precip)
+data_var = 'p' # p or tmin,tmean,tmax -- THIS IS ONLY FOR CanGRD (selection doesnt matter for CanGridP or CanKrig, both are precip)
     
 #inclusive years
 startyear = 1948
@@ -78,7 +78,7 @@ elif data_type == 'CanGridP':
 
 
     time, time_str = [], []
-    for year in range(startyear, endyear + 1):
+    for year in range(startyear-1, endyear + 1):
         for month in range(1, 13):  # Months 1-12
             time.append(datetime.datetime(year, month, 1))
             time_str.append(f'{year}{month:02d}')
@@ -134,7 +134,7 @@ if data_type in ['CanKrig','CanGridP']:
     da_jja = (precip_seas_gr['JJA']-precip_seas_means_base.sel(season='JJA'))/precip_seas_means_base.sel(season='JJA') * 100
     da_son = (precip_seas_gr['SON']-precip_seas_means_base.sel(season='SON'))/precip_seas_means_base.sel(season='SON') * 100
 
-#%% read in cangrd data
+#% read in cangrd data
 
 if data_type == 'CanGRD':
     points_file = "C:/Users/GnegyE/Desktop/trends/raw_data/CANGRD_points_LL.txt"
@@ -165,7 +165,7 @@ if data_type == 'CanGRD':
         data[data > 10e30] = np.nan
 
     
-    years = [datetime.datetime(year, 1, 1) for year in range(startyear, endyear + 1)]
+    years = [datetime.datetime(year, 1, 1) for year in range(startyear-1, endyear + 1)]
     
     def load_cangrd(seas_ID):
         cangrd_data = np.empty((x_len, y_len, len(years)))
