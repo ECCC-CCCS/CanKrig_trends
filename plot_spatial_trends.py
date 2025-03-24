@@ -60,10 +60,17 @@ t_names = {
     'p': '',
 }
 
+seasons = {
+    'DJF': 'Winter',
+    'MAM': 'Spring',
+    'JJA': 'Summer',
+    'SON': 'Fall',
+    'Annual': 'Annual',
+}
 #%%
 
 if data_type == 'CanGRD':
-    file = f'C:/Users/GnegyE/Desktop/trends/nc_files/aaa{data_var}_trends_{startyear}-{endyear}_{data_type}_anomalies.nc'
+    file = f'C:/Users/GnegyE/Desktop/trends/nc_files/{data_var}_trends_{startyear}-{endyear}_{data_type}_anomalies.nc'
 else:
     file = f'C:/Users/GnegyE/Desktop/trends/nc_files/trends_{startyear}-{endyear}_{data_type}_anomalies.nc'
 
@@ -173,7 +180,7 @@ def make_plots(data, pval, seas):
     cbar_ax.tick_params(labelsize=16)
     cbar_ax.set_xlabel(f"Change in {t_names[data_var]}{longname.capitalize()} ({unit})",size=18)
 
-    fig.suptitle(f"{data_type} {startyear}-{endyear}: {seas}\n(relative to {startyear_base}-{endyear_base} mean)", fontsize=20, y=0.9)   
+    fig.suptitle(f"{data_type} {startyear}-{endyear}: {seasons[seas]}\n(relative to {startyear_base}-{endyear_base} mean)", fontsize=20, y=0.9)   
     
     if longname == "temperature":
         plt.savefig(f"{savepath}/{data_var}/{seas}.png", bbox_inches='tight', dpi=500)
@@ -183,7 +190,7 @@ def make_plots(data, pval, seas):
     plt.close()
     
 #%%
-make_plots(ann_trend, ann_pval, "Annual")
+#make_plots(ann_trend, ann_pval, "Annual")
 make_plots(djf_trend, djf_pval, "DJF")
 make_plots(mam_trend, mam_pval, "MAM")
 make_plots(jja_trend, jja_pval, "JJA")

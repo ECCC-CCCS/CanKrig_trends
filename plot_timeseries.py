@@ -15,8 +15,8 @@ from netCDF4 import Dataset
 import datetime
 import pymannkendall as mk
 
-data_type = 'CanGridP' # choose from CanGridP, CanKrig, or CanGRD
-data_var = 'p' # p or tmin,tmean,tmax -- THIS IS ONLY FOR CanGRD (selection doesnt matter for CanGridP or CanKrig, both are precip)
+data_type = 'CanGRD' # choose from CanGridP, CanKrig, or CanGRD
+data_var = 'tmax' # p or tmin,tmean,tmax -- THIS IS ONLY FOR CanGRD (selection doesnt matter for CanGridP or CanKrig, both are precip)
     
 #note this isnt set up to plot CanGRD precip or CanKrig (so only CanGridP and CanGRD temperatures)
 #%%
@@ -290,7 +290,7 @@ for prov in ['Canada',"NU","YT","QC","AB","SK","MB","NL","BC","PE","NB","NS","ON
             
         sign = "+" if change > 0 else ""
             
-        plt.title(province_names[prov] + " (" + sign + str(change) + "%) - " + seasons[seas],fontsize=22)
+        plt.title(f"{province_names[prov]} ({sign}{str(change)}{unit}) - {seasons[seas]}",fontsize=22)
 
         if longname == "temperature":
             plt.savefig(f"{savepath}/{data_var}/{seas}_{prov}.png", bbox_inches='tight', dpi=500)

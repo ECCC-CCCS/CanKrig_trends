@@ -13,7 +13,7 @@ import pandas as pd
 from netCDF4 import Dataset
 import datetime
 import pymannkendall as mk
-
+#%%
 data_type = 'CanGridP' # choose from CanGridP, CanKrig, or CanGRD
 
 data_var = 'p' # p or tmin,tmean,tmax -- THIS IS ONLY FOR CanGRD (selection doesnt matter for CanGridP or CanKrig, both are precip)
